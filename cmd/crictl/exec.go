@@ -173,6 +173,14 @@ func stream(in, tty bool, url *url.URL) error {
 	logrus.Debugf("StreamOptions: %v", streamOptions)
 	if !tty {
 		return executor.Stream(streamOptions)
+	} else {
+		var err error
+		detachKeys, err := mobyterm.ToBytes("ctrl-p,ctrl-q")
+		if err != nil {
+			return fmt.Errorf("could not bind detach keys")
+		}
+		pr := mobyterm.NewEscapeProxy(streamOptions.Stdin, detachKeys)
+		streamOptions.Stdin = pr
 	}
 	if !in {
 		return fmt.Errorf("tty=true must be specified with interactive=true")
