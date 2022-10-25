@@ -183,7 +183,11 @@ func stream(in, tty bool, url *url.URL) (e error) {
 		streamOptions.Stdin = pr
 
 		defer func() {
-			logrus.Debugf("stream error: %s", e.Error())
+			if e != nil {
+				logrus.Debugf("stream error: %s", e.Error())
+			} else {
+				logrus.Debugf("no error from stream")
+			}
 		}()
 	}
 	if !in {
