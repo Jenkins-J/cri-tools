@@ -174,8 +174,8 @@ func stream(in, tty bool, url *url.URL) error {
 	if !tty {
 		return executor.Stream(streamOptions)
 	} else {
-		var err error
-		detachKeys, err := mobyterm.ToBytes("ctrl-p,ctrl-q")
+		var detachKeys []byte
+		detachKeys, err = mobyterm.ToBytes("ctrl-p,ctrl-q")
 		if err != nil {
 			return fmt.Errorf("could not bind detach keys")
 		}
