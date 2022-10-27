@@ -155,7 +155,7 @@ func Exec(client internalapi.RuntimeService, opts execOptions) error {
 	return stream(opts.stdin, opts.tty, URL)
 }
 
-func stream(in, tty bool, url *url.URL) (e error) {
+func stream(in, tty bool, url *url.URL) error {
 	executor, err := remoteclient.NewSPDYExecutor(&restclient.Config{TLSClientConfig: restclient.TLSClientConfig{Insecure: true}}, "POST", url)
 	if err != nil {
 		return err
@@ -181,14 +181,6 @@ func stream(in, tty bool, url *url.URL) (e error) {
 		}
 		pr := mobyterm.NewEscapeProxy(streamOptions.Stdin, detachKeys)
 		streamOptions.Stdin = pr
-
-		defer func() {
-			if e != nil {
-				logrus.Debugf("stream error: %s", e.Error())
-			} else {
-				logrus.Debugf("no error from stream")
-			}
-		}()
 	}
 	if !in {
 		return fmt.Errorf("tty=true must be specified with interactive=true")
