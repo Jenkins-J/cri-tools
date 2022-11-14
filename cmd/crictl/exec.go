@@ -17,6 +17,7 @@ limitations under the License.
 package main
 
 import (
+	"errors"
 	"fmt"
 	"net/url"
 	"time"
@@ -177,7 +178,7 @@ func stream(in, tty bool, url *url.URL) error {
 		var detachKeys []byte
 		detachKeys, err = mobyterm.ToBytes("ctrl-p,ctrl-q")
 		if err != nil {
-			return fmt.Errorf("could not bind detach keys")
+			return errors.New("could not bind detach keys")
 		}
 		pr := mobyterm.NewEscapeProxy(streamOptions.Stdin, detachKeys)
 		streamOptions.Stdin = pr
