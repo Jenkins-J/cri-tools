@@ -38,6 +38,8 @@ const (
 	kubeletURLHost   = "http://127.0.0.1:10250"
 )
 
+const detachSequence = "ctrl-p,ctrl-q"
+
 var runtimeExecCommand = &cli.Command{
 	Name:                   "exec",
 	Usage:                  "Run a command in a running container",
@@ -176,7 +178,7 @@ func stream(in, tty bool, url *url.URL) error {
 		return executor.Stream(streamOptions)
 	} else {
 		var detachKeys []byte
-		detachKeys, err = mobyterm.ToBytes("ctrl-p,ctrl-q")
+		detachKeys, err = mobyterm.ToBytes(detachSequence)
 		if err != nil {
 			return errors.New("could not bind detach keys")
 		}
